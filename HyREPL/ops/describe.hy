@@ -1,3 +1,5 @@
+(import hy)
+(import platform [python-version])
 (import HyREPL.ops.utils [ops])
 (require HyREPL.ops.utils [defop])
 
@@ -15,13 +17,14 @@
               "ops" "Map of operations supported by this nREPL server"
               "versions" "Map containing version maps, for example of the nREPL protocol supported by this server"}}
   ;; TODO: don't ignore verbose argument
-  ;; TODO: more versions: Python, Hy
   (.write session
           {"status" ["done"]
            "id" (.get msg "id")
            "versions" {"nrepl" (make-version 0 2 7)
                        "java" (make-version)
-                       "clojure" (make-version)}
+                       "clojure" (make-version)
+                       "hy" hy.__version__
+                       "python" (python-version)}
            "ops" (dfor [k v] (.items ops) k (get v :desc))
            "session" (.get msg "session")}
           transport))
